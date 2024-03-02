@@ -12,6 +12,7 @@
 int main(void) {
 	int input;
 	printf("BLOOD OATH - Made by Nate Berglas\n");
-	struct playerStruct player = charecterCreation();
+	struct playerStruct player;
+	player = charecterCreation();
 	return 0;
 }
