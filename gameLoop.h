@@ -1,7 +1,13 @@
 //gameLoop.h
+#ifndef GAMELOOP_H
+#define GAMELOOP_H
+
+// Libraries
+#include <stdbool.h>
 
 // Header
 #include "playerStruct.h"
 
 // Functions
-void gameLoop(struct playerStruct);
+bool gameLoop(struct playerStruct, struct journalStruct, int);
+#endif
