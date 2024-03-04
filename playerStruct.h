@@ -2,10 +2,18 @@
 #ifndef PLAYERSTRUCT_H
 #define PLAYERSTRUCT_H
 
+// Macros
+#define MAX_INVENTORY 10
+#define MAX_STRING_LENGTH 30
+#define MAX_DESCRIPTION_LENGTH 64
+#define MAP_HEIGHT 7
+#define MAP_WIDTH 21
+
 // Structures
+// Player
 struct item {
-	char name[30]; // when you're better at c replaced with maxTextLength and others
-	char description[];
+	char name[MAX_STRING_LENGTH];
+	char description[MAX_DESCRIPTION_LENGTH];
 };
 
 struct statBlock {
@@ -18,21 +26,27 @@ struct statBlock {
 struct playerStruct {
 	int xp;
 	struct statBlock stats;
-	struct item inventory[10]; // here
-	char name[30]; // here as well
+	struct item inventory[MAX_INVENTORY];
+	char name[MAX_STRING_LENGTH];
 };
 
+// Journal
 struct mapStruct {
-	char playerMap[7][21];
-	char exploreMap[7][21];
+	char playerMap[MAP_HEIGHT][MAP_WIDTH];
+	char fullMap[MAP_HEIGHT][MAP_WIDTH];
+	int campX;
+	int campY;
 };
 
 struct journalStruct {
 	struct mapStruct map;
-
+	int biome;
 };
 
 // Functions
-void mapInit(int, char[7][21]);
+int biomeCtoI(char);
+void biomeItoS(int, char[MAX_STRING_LENGTH]);
+void mapInit(const int, char[MAP_HEIGHT][MAP_WIDTH]);
+void mapReveal(struct journalStruct*);
 
 #endif

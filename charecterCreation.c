@@ -10,7 +10,10 @@
 #include "charecterCreation.h"
 #include "playerStruct.h"
 
-//skillAssign(skill, input);
+// Macros
+#define SKILL_COUNT 4
+
+// Functions
 void skillAssign(int skill, int input, struct playerStruct* player, int statScores[]);
 
 //charecterCreation(void) Creates the charecter, returning the player that was made
@@ -19,11 +22,19 @@ void skillAssign(int skill, int input, struct playerStruct* player, int statScor
 struct playerStruct charecterCreation(void) {
 	// Variables
 	struct playerStruct player;
-	char inputc[20];
+	char inputc[MAX_STRING_LENGTH];
 	int inputi;
-	int statScores[4];
+	int statScores[SKILL_COUNT];
 
-	// Charecter Creation
+	// Inventory Set up
+	for (int i = 0; i < MAX_INVENTORY; i++) {
+		strcpy(player.inventory[i].name, "Empty");
+		strcpy(player.inventory[i].description, "No description");
+	}
+	// Xp set up
+	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
+
+	// Charecter Creation I/O & stats
 	printf("What is your name? $: ");
 	scanf("%s", inputc);
 	strcpy(player.name, inputc);
@@ -32,18 +43,18 @@ struct playerStruct charecterCreation(void) {
 	srand(time(NULL)); // Initialize a seed
 	printf("\n");
 	char *skills[] = {"willpower", "luck", "education", "craftmanship"};
-	for(int j = 0; j < 4; j++) {
+	for(int j = 0; j < SKILL_COUNT; j++) {
 		statScores[j] = rand();
 		statScores[j] %= 2000;
 		statScores[j] += 500;
 		printf("%d: %d\n", j+1, statScores[j]);
 	}
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < SKILL_COUNT; i++) {
 		printf("Your available stats are willpower, luck, education and craftmaship. Enter the number you want for %s $: ",skills[i]);
 		scanf("%d", &inputi);
 		skillAssign(i,inputi,&player,statScores);
 		printf("Available scores:\n");
-		for (int j = 0; j < 4-i-1; j++) {
+		for (int j = 0; j < SKILL_COUNT-i-1; j++) {
 			if (j == inputi-1) {
 				for (int k = 0; k < 4-i-j; k++) {
 					statScores[k] = statScores[k+1];
@@ -58,21 +69,31 @@ struct playerStruct charecterCreation(void) {
 	printf("Luck: %d\n", player.stats.luck);
 	printf("Education: %d\n", player.stats.education);
 	printf("Craftmanship: %d\n", player.stats.craftmanship);
+
 	return player;
 }
 
 void skillAssign(int skill, int input, struct playerStruct* player, int statScores[]) {
-	if (skill == 0) {
+	switch(skill) {
+	case 0:
 		// Willpower
 		player->stats.willpower = *(statScores+input-1);
-	} else if (skill == 1) {
+		break;
+	case 1:
 		// Luck
 		player->stats.luck = *(statScores+input-1);
-	} else if (skill == 2) {
+		break;
+	case 2:
 		// Education
-		player->stats.education = *(statScores+input-1); 
-	} else if (skill == 3) {
+		player->stats.education = *(statScores+input-1);
+		break; 
+	case 3:
 		// Craftmanship
 		player->stats.craftmanship = *(statScores+input-1);
+		break;
+	default:
+		// Other
+		printf("INCORRECT SKILL!!\n");
+		break;
 	}
 }

@@ -9,5 +9,5 @@
 #include "playerStruct.h"
 
 // Functions
-bool gameLoop(struct playerStruct, struct journalStruct, int);
+bool gameLoop(struct playerStruct*, struct journalStruct*, int);
 #endif

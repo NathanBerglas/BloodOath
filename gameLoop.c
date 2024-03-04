@@ -11,13 +11,14 @@
 
 // Constants
 const int actionCount = 3;
+const int maxDays = 15;
 
-bool gameLoop(struct playerStruct player, struct journalStruct journal, int day) {
+bool gameLoop(struct playerStruct *player, struct journalStruct *journal, int day) {
     // Variables
     int inputi;
 
     // Check if game is over (lost)
-    if (day > 15) {
+    if (day > maxDays) {
         printf("As the sun sets on your fiteenth day, a chill runs down your spine...\n");
         printf("During the night in the realm where terror reigns, the Vampire Lord Jezebel destorys the forest, your town and all that lives within.\n");
         printf("In natures complete destruction, Jezebel reigns supreme, and marks his new tyranny with your death...\n");
@@ -26,30 +27,44 @@ bool gameLoop(struct playerStruct player, struct journalStruct journal, int day)
 
     // Day loop
     printf("DAY: %d\n", day);
-    for (int actions = actionCount; actions > 0; actions--) {
+    int actions = actionCount;
+    while(actions > 0) {
         printf("Remaining actions: %d\n", actions);
-        printf("(1) See camp (0 Actions)\n");
-        printf("(2) Train 3 skills (1 Actions)\n");
+        printf("(1) See camp (0 Actions)\n"); // Done!
+        printf("(2) Train 2 skills (1 Actions)\n"); // Done!
         printf("(3) Scavenge supplies (1 Action)\n");
         printf("(4) Explore (2 Actions)\n");
-        printf("(5) Recover and heal (1 day)\n");
+        printf("(5) Move Camp (1 Action)\n");
+        printf("(6) Recover and heal (1 day)\n");
         scanf("%d", &inputi);
         switch (inputi) {     
         case 1:
-            camp(player, journal);
+            camp(&player, &journal);
             break;
         case 2:
+            train(&player);
+            actions--;
             break;
         case 3:
+            scavenge(&player);
+            actions--;
             break;
         case 4:
+            explore(&player);
+            actions -= 2;
             break;
         case 5:
+            move(&player);
+            actions--;
             break;
+        case 6:
+            recover(&player);
+            actions = 0;
         default:
-            printf("Not a correct action. You just chill the whole day.\n");
+            printf("Not a correct action.\n");
+            actions;
             break;
         }
     }
-    gameLoop(player, journal, day+1);
+    return gameLoop(player, journal, day+1);
 }
