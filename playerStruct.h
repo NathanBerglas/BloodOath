@@ -6,8 +6,10 @@
 #define MAX_INVENTORY 10
 #define MAX_STRING_LENGTH 30
 #define MAX_DESCRIPTION_LENGTH 64
-#define MAP_HEIGHT 7
+#define MAP_HEIGHT 9
 #define MAP_WIDTH 21
+#define CHUNK_COUNT 21
+#define CHUNK_SIZE 3
 
 // Structures
 // Player
@@ -34,6 +36,7 @@ struct playerStruct {
 struct mapStruct {
 	char playerMap[MAP_HEIGHT][MAP_WIDTH];
 	char fullMap[MAP_HEIGHT][MAP_WIDTH];
+	char chunks[CHUNK_COUNT];
 	int campX;
 	int campY;
 };
@@ -47,6 +50,8 @@ struct journalStruct {
 int biomeCtoI(char);
 void biomeItoS(int, char[MAX_STRING_LENGTH]);
 void mapInit(const int, char[MAP_HEIGHT][MAP_WIDTH]);
-void mapReveal(struct journalStruct*);
+void mapInitChunk(char[CHUNK_COUNT]);
+//void mapReveal(struct journalStruct*);
+void chunkReveal(struct journalStruct*, int);
 
 #endif

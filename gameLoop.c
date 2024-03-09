@@ -8,6 +8,7 @@
 #include "charecterCreation.h"
 #include "playerStruct.h"
 #include "camp.h"
+#include "actions.h"
 
 // Constants
 const int actionCount = 3;
@@ -30,35 +31,35 @@ bool gameLoop(struct playerStruct *player, struct journalStruct *journal, int da
     int actions = actionCount;
     while(actions > 0) {
         printf("Remaining actions: %d\n", actions);
-        printf("(1) See camp (0 Actions)\n"); // Done!
-        printf("(2) Train 2 skills (1 Actions)\n"); // Done!
-        printf("(3) Scavenge supplies (1 Action)\n");
-        printf("(4) Explore (2 Actions)\n");
-        printf("(5) Move Camp (1 Action)\n");
+        printf("(1) See camp (0 Actions)\n"); // Do crafting and using items
+        printf("(2) Train 2 skills\n"); // Done!
+        printf("(3) Scavenge supplies\n");
+        printf("(4) Explore\n"); // Done except for encounters!
+        printf("(5) Move Camp\n"); // Next
         printf("(6) Recover and heal (1 day)\n");
         scanf("%d", &inputi);
         switch (inputi) {     
         case 1:
-            camp(&player, &journal);
+            camp(player, journal);
             break;
         case 2:
-            train(&player);
+            train(player);
             actions--;
             break;
         case 3:
-            scavenge(&player);
+            scavenge(player);
             actions--;
             break;
         case 4:
-            explore(&player);
-            actions -= 2;
+            explore(journal);
+            actions--;
             break;
         case 5:
-            move(&player);
+            move(player);
             actions--;
             break;
         case 6:
-            recover(&player);
+            recover(player);
             actions = 0;
         default:
             printf("Not a correct action.\n");

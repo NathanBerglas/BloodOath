@@ -12,8 +12,9 @@
 #include "gameLoop.h"
 
 // Constants
-const int campStartX = 9;
-const int campStartY = 3;
+const int campStartX = 10;
+const int campStartY = 4;
+const int startingChunk = 10;
 
 // main(void)
 int main(void) {
@@ -24,9 +25,12 @@ int main(void) {
 	// Set up and intialization
 	mapInit(1, journal.map.fullMap);
 	mapInit(2, journal.map.playerMap);
+	mapInitChunk(journal.map.chunks);
 	journal.map.campY = campStartY;
 	journal.map.campX = campStartX;
-	mapReveal(&journal);
+	chunkReveal(&journal, startingChunk);
+	journal.map.playerMap[campStartY][campStartX] = 'C';
+    journal.biome = biomeCtoI(journal.map.fullMap[campStartY][campStartX]);
 
 	// Intro
 	printf("BLOOD OATH - Made by Nate Berglas\n");

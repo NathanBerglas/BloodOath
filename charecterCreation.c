@@ -13,6 +13,10 @@
 // Macros
 #define SKILL_COUNT 4
 
+// Constants
+const int minSkill = 1500;
+const int maxSkill = 2500;
+
 // Functions
 void skillAssign(int skill, int input, struct playerStruct* player, int statScores[]);
 
@@ -31,8 +35,6 @@ struct playerStruct charecterCreation(void) {
 		strcpy(player.inventory[i].name, "Empty");
 		strcpy(player.inventory[i].description, "No description");
 	}
-	// Xp set up
-	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
 
 	// Charecter Creation I/O & stats
 	printf("What is your name? $: ");
@@ -45,8 +47,8 @@ struct playerStruct charecterCreation(void) {
 	char *skills[] = {"willpower", "luck", "education", "craftmanship"};
 	for(int j = 0; j < SKILL_COUNT; j++) {
 		statScores[j] = rand();
-		statScores[j] %= 2000;
-		statScores[j] += 500;
+		statScores[j] %= maxSkill-minSkill;
+		statScores[j] += minSkill;
 		printf("%d: %d\n", j+1, statScores[j]);
 	}
 	for (int i = 0; i < SKILL_COUNT; i++) {
@@ -70,6 +72,9 @@ struct playerStruct charecterCreation(void) {
 	printf("Education: %d\n", player.stats.education);
 	printf("Craftmanship: %d\n", player.stats.craftmanship);
 
+	// Xp set up
+	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
+	
 	return player;
 }
 
