@@ -25,13 +25,7 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
     printf("Camp Biome: %s\n", biomeString);
     printf("Map: \n");
     printf("(_: Forest, M: Mountain, r: River, L: Lake, D: Desert, V: Village, c: Small Cave, C: Big Cave, J: Jezebel's Castle)\n");
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        printf("%c",journal->map.playerMap[y][0]);
-        for (int x = 1; x < MAP_WIDTH; x++) {
-            printf(" %c",journal->map.playerMap[y][x]);
-        }
-        printf("\n");
-    }
+    printMap(journal);
     printf("Camp actions:\n");
     printf("(1) Craft\n");
     printf("(2) Use item\n");

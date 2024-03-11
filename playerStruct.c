@@ -2,6 +2,7 @@
 
 // Libraries
 #include <string.h>
+#include <stdio.h>
 
 // Headers
 #include "playerStruct.h"
@@ -146,8 +147,18 @@ void mapInitChunk(char mapInit[CHUNK_COUNT]) {
     }
 }
 
+void printMap(struct journalStruct* journal) {
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        printf("%c",journal->map.playerMap[y][0]);
+        for (int x = 1; x < MAP_WIDTH; x++) {
+            printf(" %c",journal->map.playerMap[y][x]);
+        }
+        printf("\n");
+    }
+}
+
 // Reveals a chosen chunk
-void chunkReveal(struct journalStruct* journal, int chunk) { // Takes not index
+void chunkReveal(struct journalStruct* journal, int chunk) { // Takes index
     int offsetY[9] = {0, 0, 0, 1, 0, 0, 1, 0, 0};
     int offsetX[9] = {0, 1, 1, -2, 1, 1, -2, 1, 1};
     int indexY = chunk / (MAP_WIDTH / CHUNK_SIZE);
@@ -167,7 +178,17 @@ void chunkReveal(struct journalStruct* journal, int chunk) { // Takes not index
     journal->map.playerMap[journal->map.campY][journal->map.campX] = 'C';
 }
 
-
+// Moves camp
+void moveCamp(struct journalStruct* journal, int x, int y) {
+    //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
+    journal->map.playerMap[journal->map.campY][journal->map.campX] = 
+    journal->map.fullMap[journal->map.campY][journal->map.campX];
+    journal->map.campX = x - 1;
+    journal->map.campY = y - 1;
+    //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
+    journal->map.playerMap[journal->map.campY][journal->map.campX] = 'C';
+    //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
+}
 
 /*
 // Reveals surrounding area around camp

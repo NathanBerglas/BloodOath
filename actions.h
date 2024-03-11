@@ -7,5 +7,5 @@
 void train(struct playerStruct*);
 void scavenge(struct playerStruct*);
 void explore(struct journalStruct*);
-void move(struct playerStruct*);
+void move(struct journalStruct*);
 void recover(struct playerStruct*);

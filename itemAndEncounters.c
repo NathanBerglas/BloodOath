@@ -31,7 +31,7 @@ const struct item adeptItems[12] = {
 {"Sword", "A sword. What do you expect?"}, // Weapons
 {"Leather whip", "A whipe made from leather, quite effective."},
 {"Mace", "BIG SMASH!"},
-{"Wizard Staff", "I cast fireball!"},
+{"Wizard Hat", "Not for sorting, but for destruction."},
 {"First Aid Kit", "Good in a pinch to heal."}, // Healing
 {"Leaf", "A leaf."},
 {"Cooked meat", "Can be eaten, filling!"},
@@ -45,8 +45,8 @@ const struct item adeptItems[12] = {
 const struct item expertItems[12] = {
 {"Katana", "Rumoured to be able to kill a demon by decapitation."}, // Weapons
 {"Morningstar Whip", "Tried and tested against Vampires for generations."},
-{"Wizard Hat", "Not for sorting, but for destruction."},
 {"War Hammer", "SMASH, SMASH, SMASH, SMASH!!!"},
+{"Wizard Staff", "I cast fireball!"},
 {"Potion of Healing", "Don't worry, the glass is edible as well!"}, // Healing
 {"Branch", "If combined, rumoured to be incredibly powerful..."},
 {"Steak", "Yes. A fully cooked steak... just found... Just take it."},

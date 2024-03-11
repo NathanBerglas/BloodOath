@@ -59,8 +59,8 @@ void scavenge(struct playerStruct *player) {
 
 // Helper function for explore
 char printChunk(const struct journalStruct *journal, const int index) {
-    if (journal->map.campX <= (index%7 +1) * 3 && journal->map.campX >= (index%7) * 3 &&
-        journal->map.campY <= (index/7 + 1) * 3 && journal->map.campY >= (index/7) * 3) {
+    if (journal->map.campX < (index%7 +1) * 3 && journal->map.campX >= (index%7) * 3 && // 12
+        journal->map.campY < (index/7 + 1) * 3 && journal->map.campY >= (index/7) * 3) {
         return 'C';
     } else if (journal->map.chunks[index] == 'E') {
         return 'E';
@@ -108,8 +108,24 @@ void explore(struct journalStruct *journal) {
     }
 }
 
-void move(struct playerStruct *player) {
+void move(struct journalStruct *journal) {
+    // Variables
+    int inputiX = 0;
+    int inputiY = 0;
 
+    printf("What explored tile do you wish to move your camp? Please enter the row then column / X, then Y.\n");
+    printf("You start at (11,5). Top right would be (21, 1). Bottom left would be (1, 9): \n");
+    printMap(journal);
+    printf("\n");
+    scanf("%d", &inputiX);
+    scanf("%d", &inputiY);
+    //printf("\nx:, %d, y: %d->%c<-\n",inputiX-1, inputiY-1, journal->map.playerMap[inputiY - 1][inputiX - 1]);
+    if (inputiX > 1 && inputiX <= MAP_WIDTH && inputiY  > 1 && inputiY <= MAP_HEIGHT &&
+        journal->map.playerMap[inputiY - 1][inputiX - 1] != '?') {
+        moveCamp(journal, inputiX, inputiY);
+    } else {
+        printf("You must explore a tile before moving your camp there.\n");
+    }
 }
 
 void recover(struct playerStruct *player) {

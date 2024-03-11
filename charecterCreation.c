@@ -35,7 +35,7 @@ struct playerStruct charecterCreation(void) {
 		strcpy(player.inventory[i].name, "Empty");
 		strcpy(player.inventory[i].description, "No description");
 	}
-
+	#ifndef SKIP
 	// Charecter Creation I/O & stats
 	printf("What is your name? $: ");
 	scanf("%s", inputc);
@@ -71,7 +71,13 @@ struct playerStruct charecterCreation(void) {
 	printf("Luck: %d\n", player.stats.luck);
 	printf("Education: %d\n", player.stats.education);
 	printf("Craftmanship: %d\n", player.stats.craftmanship);
-
+	#else
+	player.name[0] = 'P';
+	player.stats.willpower = 1800;
+	player.stats.luck = 1800;
+	player.stats.education = 1800;
+	player.stats.craftmanship = 1800;
+	#endif
 	// Xp set up
 	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
 	

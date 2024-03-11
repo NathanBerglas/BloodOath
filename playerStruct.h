@@ -51,7 +51,8 @@ int biomeCtoI(char);
 void biomeItoS(int, char[MAX_STRING_LENGTH]);
 void mapInit(const int, char[MAP_HEIGHT][MAP_WIDTH]);
 void mapInitChunk(char[CHUNK_COUNT]);
-//void mapReveal(struct journalStruct*);
+void printMap(struct journalStruct*);
 void chunkReveal(struct journalStruct*, int);
+void moveCamp(struct journalStruct*, int, int);
 
 #endif
