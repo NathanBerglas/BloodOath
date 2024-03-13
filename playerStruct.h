@@ -2,6 +2,9 @@
 #ifndef PLAYERSTRUCT_H
 #define PLAYERSTRUCT_H
 
+// Libraries
+#include <stdbool.h>
+
 // Macros
 #define MAX_INVENTORY 10
 #define MAX_STRING_LENGTH 30
@@ -12,11 +15,15 @@
 #define CHUNK_COUNT 21
 #define CHUNK_SIZE 3
 
+// Constants
+extern const struct item emptyItem;
+
 // Structures
 // Player
 struct item {
 	char name[MAX_STRING_LENGTH];
 	char description[MAX_DESCRIPTION_LENGTH];
+	bool occupied;
 };
 
 struct statBlock {
@@ -55,6 +62,8 @@ void mapInitChunk(char[CHUNK_COUNT]);
 void printMap(struct journalStruct*);
 void chunkReveal(struct journalStruct*, int);
 void moveCamp(struct journalStruct*, int, int);
+bool appendItem(struct item, struct playerStruct*);
+bool deleteItem(int, struct playerStruct*);
 struct item randomItem(int, int);
 
 #endif

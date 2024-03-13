@@ -56,6 +56,17 @@ bool train(struct playerStruct *player) {
 }
 
 bool scavenge(struct playerStruct *player) {
+    // int inputi = 0;
+    // printf("Press 1: add item, 2: delete item\n");
+    // scanf("%d", &inputi);
+    // if (inputi == 1) {
+    //     appendItem(randomItem(player->stats.luck, player->xp), player);
+    // } else {
+    //     printf("Give item you wish to destroy from 1 to %d", MAX_INVENTORY);
+    //     scanf("%d", &inputi);
+    //     printf("inventory slot 2 name: %s",player->inventory[1].name);
+    //     deleteItem(inputi - 1, player);
+    // }
     return false;
 }
 

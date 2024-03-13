@@ -27,17 +27,13 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
     printf("(_: Forest, M: Mountain, r: River, L: Lake, D: Desert, V: Village, c: Small Cave, C: Big Cave, J: Jezebel's Castle)\n");
     printMap(journal);
     printf("Camp actions:\n");
-    printf("(1) Craft\n");
-    printf("(2) Use item\n");
-    printf("(3) Exit\n");
+    printf("(1) Manage Inventory\n");
+    printf("(2) Exit\n");
     int inputi = 0;
     scanf("%d",&inputi);
     switch (inputi) {
     case 1:
-        // Craft
-        break;
-    case 2:
-        // Use item
+        // Manage Inventory
         break;
     default:
         break; // Exit

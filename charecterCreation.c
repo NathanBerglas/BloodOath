@@ -31,9 +31,9 @@ struct playerStruct charecterCreation(void) {
 	int statScores[SKILL_COUNT];
 
 	// Inventory Set up
+
 	for (int i = 0; i < MAX_INVENTORY; i++) {
-		strcpy(player.inventory[i].name, "Empty");
-		strcpy(player.inventory[i].description, "No description");
+		player.inventory[i] = emptyItem;
 	}
 	#ifndef SKIP
 	// Charecter Creation I/O & stats
@@ -77,10 +77,10 @@ struct playerStruct charecterCreation(void) {
 	scanf("%d",&inputi);
 	switch (inputi) {
 		case 1:
-			player.inventory[0] = randItem1;
+			appendItem(randItem1, &player);
 		break;
 		case 2:
-			player.inventory[0] = randItem1;
+			appendItem(randItem2, &player);
 		break;
 		default:
 			printf("Item forfeit, you decide you'll be fine without.\n");

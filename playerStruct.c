@@ -21,10 +21,12 @@
 #define VILLAGE 997
 #define JEZEBEL_CASTLE 998
 
-// random item constants
+// item constants
+const struct item emptyItem = {"Empty", "No description", false};
 const int luckScale = 1;
 const int stage1 = 15000;
 const int stage2 = 30000;
+
 
 
 int biomeCtoI(char biomeChar) {
@@ -204,6 +206,40 @@ void moveCamp(struct journalStruct* journal, int x, int y) {
     //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
 }
 
+// True if it appends an item, false if inventory is full
+bool appendItem(const struct item item, struct playerStruct *player) {
+    int index = 0;
+    for(int i = 0; player->inventory[i].occupied; i++) {
+        index++;
+        if (i == MAX_INVENTORY - 1 && player->inventory[i].occupied) {
+            printf("Inventory is full, cannot add new item.\n");
+            return false;
+        }
+    }
+    player->inventory[index] = item;
+    return true;
+}
+
+// index, and player
+bool deleteItem(const int index, struct playerStruct *player) {
+    printf("Here is inventory: \n");
+    for (int i = 0; i < MAX_INVENTORY; i++) {
+        printf("Name: %s, occupied: %d\n", player->inventory[i].name, player->inventory[i].occupied);
+    }
+    if (!player->inventory[index].occupied) {
+        printf("You cannot discard a non existent item.\n");
+        return false;
+    } else {
+        for (int i = index; i + 1 < MAX_INVENTORY; i++) {
+            printf("Moving index %d, item was %s", i, player->inventory[i].name);
+            player->inventory[i] = player->inventory[i+1];
+            printf(", now is %s.\n",player->inventory[i].name);
+        }
+        player->inventory[MAX_INVENTORY - 1] = emptyItem;
+        printf("replacing with empty item called %s\n", player->inventory[MAX_INVENTORY - 1].name);
+    }
+}
+
 // randomItem(luck, xp) Gives random item
 struct item randomItem(const int luck, const int xp) {
     // Pick random item from a class
@@ -214,8 +250,6 @@ struct item randomItem(const int luck, const int xp) {
     int class = rand();
     class %= (luck * luckScale);
     class += xp;
-
-    printf("randindex : %d\n", randIndex);
     
     // Returns item
     if (class < stage1) {
@@ -226,6 +260,7 @@ struct item randomItem(const int luck, const int xp) {
         return expertItems[randIndex];
     }
 }
+
 
 /*
 // Reveals surrounding area around camp
