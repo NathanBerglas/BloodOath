@@ -2,10 +2,11 @@
 
 // Headers
 #include "playerStruct.h"
+#include <stdbool.h>
 
 // Functions
-void train(struct playerStruct*);
-void scavenge(struct playerStruct*);
-void explore(struct journalStruct*);
-void move(struct journalStruct*);
-void recover(struct playerStruct*);
+bool train(struct playerStruct*);
+bool scavenge(struct playerStruct*);
+bool explore(struct journalStruct*);
+bool move(struct journalStruct*);
+bool recover(struct playerStruct*);

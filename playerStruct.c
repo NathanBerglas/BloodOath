@@ -3,9 +3,11 @@
 // Libraries
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // Headers
 #include "playerStruct.h"
+#include "itemAndEncounters.h"
 
 // Biome Macros
 #define FOREST 990
@@ -18,6 +20,12 @@
 #define BIG_CAVE 996
 #define VILLAGE 997
 #define JEZEBEL_CASTLE 998
+
+// random item constants
+const int luckScale = 1;
+const int stage1 = 15000;
+const int stage2 = 30000;
+
 
 int biomeCtoI(char biomeChar) {
     switch (biomeChar)
@@ -103,8 +111,8 @@ void mapInit(const int type, char mapInit[MAP_HEIGHT][MAP_WIDTH]) {
             "MMrM_LLLLLL______CMMr",
             "DDM_r_L_LLL__MM___MMr",
             "DDD__L____r_____MMMM_",
-            "DDVD___M__rr_M_MM__MM",
-            "DDDDD__MM__r__MM_JJMm",
+            "DDVD___M___r_M_MM__MM",
+            "DDDDD__MM_r___MM_JJMm",
             "DcDDDD_____r_____JJMM",
             "DLLDDD__rVrr_______MM",
             "DDDDDDDr_____________"
@@ -148,7 +156,13 @@ void mapInitChunk(char mapInit[CHUNK_COUNT]) {
 }
 
 void printMap(struct journalStruct* journal) {
+    printf("0   1 ");
+    for (int i = 2; i <= MAP_WIDTH; i++) {
+        printf("%d ", (i%10));
+    }
+    printf("\n");
     for (int y = 0; y < MAP_HEIGHT; y++) {
+        printf("%d | ", y+1);
         printf("%c",journal->map.playerMap[y][0]);
         for (int x = 1; x < MAP_WIDTH; x++) {
             printf(" %c",journal->map.playerMap[y][x]);
@@ -188,6 +202,29 @@ void moveCamp(struct journalStruct* journal, int x, int y) {
     //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
     journal->map.playerMap[journal->map.campY][journal->map.campX] = 'C';
     //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
+}
+
+// randomItem(luck, xp) Gives random item
+struct item randomItem(const int luck, const int xp) {
+    // Pick random item from a class
+    int randIndex = rand();
+    randIndex %= ITEM_CLASS_SIZE;
+
+    // Pick class based on xp mostly, and up to an entire luck bonus
+    int class = rand();
+    class %= (luck * luckScale);
+    class += xp;
+
+    printf("randindex : %d\n", randIndex);
+    
+    // Returns item
+    if (class < stage1) {
+        return noviceItems[randIndex];
+    } else if (class < stage2) {
+        return adeptItems[randIndex];
+    } else {
+        return expertItems[randIndex];
+    }
 }
 
 /*

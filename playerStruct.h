@@ -6,6 +6,7 @@
 #define MAX_INVENTORY 10
 #define MAX_STRING_LENGTH 30
 #define MAX_DESCRIPTION_LENGTH 64
+#define ITEM_CLASS_SIZE 12
 #define MAP_HEIGHT 9
 #define MAP_WIDTH 21
 #define CHUNK_COUNT 21
@@ -54,5 +55,6 @@ void mapInitChunk(char[CHUNK_COUNT]);
 void printMap(struct journalStruct*);
 void chunkReveal(struct journalStruct*, int);
 void moveCamp(struct journalStruct*, int, int);
+struct item randomItem(int, int);
 
 #endif

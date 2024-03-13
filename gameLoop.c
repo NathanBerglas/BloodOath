@@ -43,24 +43,29 @@ bool gameLoop(struct playerStruct *player, struct journalStruct *journal, int da
             camp(player, journal);
             break;
         case 2:
-            train(player);
-            actions--;
+            if (train(player)) {
+                actions--;
+            }
             break;
         case 3:
-            scavenge(player);
-            actions--;
+            if (scavenge(player)) {
+                actions--;
+            }
             break;
         case 4:
-            explore(journal);
-            actions--;
+            if (explore(journal)) {
+                actions--;
+            }
             break;
         case 5:
-            move(journal);
-            actions--;
+            if (move(journal)) {
+                actions--;
+            }
             break;
         case 6:
-            recover(player);
-            actions = 0;
+            if (recover(player)) {
+                actions = 0;
+            }
         default:
             printf("Not a correct action.\n");
             actions;

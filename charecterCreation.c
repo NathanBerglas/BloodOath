@@ -65,21 +65,43 @@ struct playerStruct charecterCreation(void) {
 			printf("%d: %d\n", j+1, statScores[j]);
 		}
 	}
+
+	// Xp set up
+	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
+
+	printf("Before you flee your village, you have the chance to grab a single item, choose carefully. Enter the number of the item you choose:\n");
+	struct item randItem1 = randomItem(player.stats.luck,player.xp);	
+	struct item randItem2 = randomItem(player.stats.luck,player.xp);
+	printf("(1): %s / %s\n", randItem1.name, randItem1.description);
+	printf("(2): %s / %s\n", randItem2.name, randItem2.description);
+	scanf("%d",&inputi);
+	switch (inputi) {
+		case 1:
+			player.inventory[0] = randItem1;
+		break;
+		case 2:
+			player.inventory[0] = randItem1;
+		break;
+		default:
+			printf("Item forfeit, you decide you'll be fine without.\n");
+		break;
+	}
+
 	printf("Thus concludes charecter creation. This is your charecter:\n");
 	printf("Name: %s\n", player.name);
 	printf("Willpower: %d\n", player.stats.willpower);
 	printf("Luck: %d\n", player.stats.luck);
 	printf("Education: %d\n", player.stats.education);
 	printf("Craftmanship: %d\n", player.stats.craftmanship);
+	
 	#else
 	player.name[0] = 'P';
 	player.stats.willpower = 1800;
 	player.stats.luck = 1800;
 	player.stats.education = 1800;
 	player.stats.craftmanship = 1800;
-	#endif
-	// Xp set up
 	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
+	#endif
 	
 	return player;
 }

@@ -13,7 +13,7 @@ const int TRAINING_MAX = 400;
 const int TRAINING_MIN = 200;
 
 // Action Functions
-void train(struct playerStruct *player) {
+bool train(struct playerStruct *player) {
     // Variables 
     int inputi;
 
@@ -47,14 +47,16 @@ void train(struct playerStruct *player) {
         default:
             printf("Not a correct skill. Training forfeit.\n");
             player->xp -= trainAmount;
+            return false;
             break;
         }
         player->xp += trainAmount;
     }
+    return true;
 }
 
-void scavenge(struct playerStruct *player) {
-    
+bool scavenge(struct playerStruct *player) {
+    return false;
 }
 
 // Helper function for explore
@@ -69,7 +71,7 @@ char printChunk(const struct journalStruct *journal, const int index) {
     }
 }
 
-void explore(struct journalStruct *journal) {
+bool explore(struct journalStruct *journal) {
     // Variables
     int inputi = 0;
 
@@ -104,30 +106,37 @@ void explore(struct journalStruct *journal) {
         break;
     default:
         printf("Incorrect direction. You just stayed home.\n");
+        return false;
         break;
     }
+    return true;
 }
 
-void move(struct journalStruct *journal) {
+bool move(struct journalStruct *journal) {
     // Variables
     int inputiX = 0;
     int inputiY = 0;
 
-    printf("What explored tile do you wish to move your camp? Please enter the row then column / X, then Y.\n");
-    printf("You start at (11,5). Top right would be (21, 1). Bottom left would be (1, 9): \n");
+    printf("What explored tile do you wish to move your camp? Please enter the column then row / X, then Y.\n");
+    printf("You start at (11,5). Top right would be (21, 1). Bottom left would be (1, 9) \n");
+    printf("Note: You may only move your camp to explore solid tiles. No rivers (r) or Lakes (L): \n");
     printMap(journal);
     printf("\n");
     scanf("%d", &inputiX);
     scanf("%d", &inputiY);
     //printf("\nx:, %d, y: %d->%c<-\n",inputiX-1, inputiY-1, journal->map.playerMap[inputiY - 1][inputiX - 1]);
     if (inputiX > 1 && inputiX <= MAP_WIDTH && inputiY  > 1 && inputiY <= MAP_HEIGHT &&
-        journal->map.playerMap[inputiY - 1][inputiX - 1] != '?') {
+        journal->map.playerMap[inputiY - 1][inputiX - 1] != '?' &&
+        journal->map.playerMap[inputiY - 1][inputiX - 1] != 'r' &&
+        journal->map.playerMap[inputiY - 1][inputiX - 1] != 'L') {
         moveCamp(journal, inputiX, inputiY);
     } else {
-        printf("You must explore a tile before moving your camp there.\n");
+        printf("Invalid camp position. Either unexplored or water.\n");
+        return false;
     }
+    return true;
 }
 
-void recover(struct playerStruct *player) {
-
+bool recover(struct playerStruct *player) {
+    return false;
 }
