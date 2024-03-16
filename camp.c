@@ -15,7 +15,7 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
     printf("Willpower: %d\n", player->stats.willpower);
     printf("Luck: %d\n", player->stats.luck);
     printf("Education: %d\n", player->stats.education);
-    printf("Craftmanship: %d\n", player->stats.craftmanship);
+    printf("Craftmanship: %d\n", player->stats.survival);
     printf("Equipment Slots: \n");
     for(int i = 0; i < MAX_INVENTORY; i++) {
         printf("%d: %s \\ %s\n",i+1,player->inventory[i].name, player->inventory[i].description);
@@ -24,7 +24,7 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
     biomeItoS(journal->biome, biomeString);
     printf("Camp Biome: %s\n", biomeString);
     printf("Map: \n");
-    printf("(_: Forest, M: Mountain, r: River, L: Lake, D: Desert, V: Village, c: Small Cave, C: Big Cave, J: Jezebel's Castle)\n");
+    printf("(_: Forest, M: Mountain, r: River, L: Lake, D: Desert, V: Village, P: Pyramid, C: Cave, J: Jezebel's Castle)\n");
     printMap(journal);
     printf("Camp actions:\n");
     printf("(1) Manage Inventory\n");
@@ -34,6 +34,10 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
     switch (inputi) {
     case 1:
         // Manage Inventory
+        printf("Select what item you wish you to use?\n");
+        int inputi;
+        scanf("%d", &inputi);
+        player->inventory[inputi - 1].use(player, journal);
         break;
     default:
         break; // Exit

@@ -31,7 +31,7 @@ bool gameLoop(struct playerStruct *player, struct journalStruct *journal, int da
     int actions = actionCount;
     while(actions > 0) {
         printf("Remaining actions: %d\n", actions);
-        printf("(1) See camp (0 Actions)\n"); // Do crafting and using items
+        printf("(1) See camp (0 Actions)\n"); // Do using items
         printf("(2) Train 2 skills\n"); // Done!
         printf("(3) Scavenge supplies\n"); // Next, but scwawy
         printf("(4) Explore\n"); // Done except for encounters!
@@ -68,7 +68,7 @@ bool gameLoop(struct playerStruct *player, struct journalStruct *journal, int da
             }
         default:
             printf("Not a correct action.\n");
-            actions;
+            actions--;
             break;
         }
     }

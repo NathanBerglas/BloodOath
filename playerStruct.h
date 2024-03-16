@@ -5,11 +5,17 @@
 // Libraries
 #include <stdbool.h>
 
+// Headers
+#include "playerStruct.h"
+
 // Macros
 #define MAX_INVENTORY 10
+#define BACKPACK_SIZE 10
 #define MAX_STRING_LENGTH 30
 #define MAX_DESCRIPTION_LENGTH 64
 #define ITEM_CLASS_SIZE 12
+#define ITEM_BIOME_SIZE 8
+#define ITEM_SPECIAL_SIZE 3
 #define MAP_HEIGHT 9
 #define MAP_WIDTH 21
 #define CHUNK_COUNT 21
@@ -19,24 +25,29 @@
 extern const struct item emptyItem;
 
 // Structures
+
+struct playerStruct; // For item
+struct journalStruct; // For item
+
 // Player
 struct item {
 	char name[MAX_STRING_LENGTH];
 	char description[MAX_DESCRIPTION_LENGTH];
-	bool occupied;
+	int id;
+	bool (*use)(struct playerStruct*, struct journalStruct*);
 };
 
 struct statBlock {
 	int willpower;
 	int luck;
 	int education;
-	int craftmanship;
+	int survival;
 };
 
 struct playerStruct {
 	int xp;
 	struct statBlock stats;
-	struct item inventory[MAX_INVENTORY];
+	struct item inventory[MAX_INVENTORY + BACKPACK_SIZE];
 	char name[MAX_STRING_LENGTH];
 };
 

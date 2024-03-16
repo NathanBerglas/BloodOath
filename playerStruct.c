@@ -7,27 +7,25 @@
 
 // Headers
 #include "playerStruct.h"
-#include "itemAndEncounters.h"
+#include "items.h"
 
-// Biome Macros
+// Biome Macros (Needed to be Macros for Switch)
+// Because they are defined here, they are not in other files
 #define FOREST 990
 #define CAMP 999
 #define LAKE 991
 #define RIVER 992
 #define MOUNTAIN 993
 #define DESERT 994
-#define SMALL_CAVE 995
-#define BIG_CAVE 996
+#define PYRAMID 995
+#define CAVE 996
 #define VILLAGE 997
 #define JEZEBEL_CASTLE 998
 
 // item constants
-const struct item emptyItem = {"Empty", "No description", false};
 const int luckScale = 1;
 const int stage1 = 15000;
 const int stage2 = 30000;
-
-
 
 int biomeCtoI(char biomeChar) {
     switch (biomeChar)
@@ -47,11 +45,11 @@ int biomeCtoI(char biomeChar) {
     case 'D':
         return DESERT;
         break;
-    case 'c':
-        return SMALL_CAVE;
+    case 'P':
+        return PYRAMID;
         break;
     case 'C':
-        return BIG_CAVE;
+        return CAVE;
         break;
     case 'V':
         return VILLAGE;
@@ -66,57 +64,57 @@ int biomeCtoI(char biomeChar) {
 
 void biomeItoS(int biomeInt, char biomeString[MAX_STRING_LENGTH]) {
     switch (biomeInt) {
-    case FOREST:
+    case FOREST: {
         char Forest[MAX_STRING_LENGTH] = "Forest";
         strcpy(biomeString, Forest);
-        break;
-    case LAKE:
+        break; }
+    case LAKE: {
         char Lake[MAX_STRING_LENGTH] = "Lake";
         strcpy(biomeString, Lake);
-        break;
-    case RIVER:
+        break; }
+    case RIVER: {
         char River[MAX_STRING_LENGTH] = "River";
         strcpy(biomeString, River);
-        break;
-    case MOUNTAIN:
+        break; }
+    case MOUNTAIN: {
         char Mountain[MAX_STRING_LENGTH] = "Mountain";
         strcpy(biomeString, Mountain);
-        break;
-    case DESERT:
+        break; }
+    case DESERT: {
         char Desert[MAX_STRING_LENGTH] = "Desert";
         strcpy(biomeString, Desert);
-        break;
-    case SMALL_CAVE:
-        char Small_Cave[MAX_STRING_LENGTH] = "Small Cave";
-        strcpy(biomeString, Small_Cave);
-        break;
-    case BIG_CAVE:
-        char Big_Cave[MAX_STRING_LENGTH] = "Big Cave";
-        strcpy(biomeString, Big_Cave);
-        break;
-    case VILLAGE:
+        break; }
+    case PYRAMID: {
+        char Pyramid[MAX_STRING_LENGTH] = "Pyramid";
+        strcpy(biomeString, Pyramid);
+        break; }
+    case CAVE: {
+        char Cave[MAX_STRING_LENGTH] = "Cave";
+        strcpy(biomeString, Cave);
+        break; }
+    case VILLAGE: {
         char Village[MAX_STRING_LENGTH] = "Village";
         strcpy(biomeString, Village);
-        break;
-    case JEZEBEL_CASTLE:
+        break; }
+    case JEZEBEL_CASTLE: {
         char Jezebels_Castle[MAX_STRING_LENGTH] = "Jezebel's Castle";
         strcpy(biomeString, Jezebels_Castle);
-        break;
+        break; }
     }
 }
 
 void mapInit(const int type, char mapInit[MAP_HEIGHT][MAP_WIDTH]) {
     // Full map
     if (type == 1) {
-		    char map[MAP_HEIGHT][MAP_WIDTH] = { // C for camp, _ for forest, L for lake, r for river M for mountain, D for desert, c for small cave, C for big cave, and V for village
+		    char map[MAP_HEIGHT][MAP_WIDTH] = { // C for camp, _ for forest, L for lake, r for river M for mountain, D for desert, P for pyramid, C for cave, and V for village
             "rrrLLLLLLLLLrrrrrrrrM",
             "MMrM_LLLLLL______CMMr",
             "DDM_r_L_LLL__MM___MMr",
             "DDD__L____r_____MMMM_",
-            "DDVD___M___r_M_MM__MM",
-            "DDDDD__MM_r___MM_JJMm",
-            "DcDDDD_____r_____JJMM",
-            "DLLDDD__rVrr_______MM",
+            "DDDD___M___r_M_MM__MM",
+            "DDDDD__MM_r___MM_MM_M",
+            "DPDDDD_____r______MMM",
+            "DLLDDD__rVrr_______J_",
             "DDDDDDDr_____________"
 	    };
         for (int x = 0; x <= MAP_WIDTH; x++) {
@@ -209,9 +207,9 @@ void moveCamp(struct journalStruct* journal, int x, int y) {
 // True if it appends an item, false if inventory is full
 bool appendItem(const struct item item, struct playerStruct *player) {
     int index = 0;
-    for(int i = 0; player->inventory[i].occupied; i++) {
+    for(int i = 0; player->inventory[i].id != EMPTY; i++) {
         index++;
-        if (i == MAX_INVENTORY - 1 && player->inventory[i].occupied) {
+        if (i == MAX_INVENTORY - 1 && player->inventory[i].id != EMPTY) {
             printf("Inventory is full, cannot add new item.\n");
             return false;
         }
@@ -224,9 +222,9 @@ bool appendItem(const struct item item, struct playerStruct *player) {
 bool deleteItem(const int index, struct playerStruct *player) {
     printf("Here is inventory: \n");
     for (int i = 0; i < MAX_INVENTORY; i++) {
-        printf("Name: %s, occupied: %d\n", player->inventory[i].name, player->inventory[i].occupied);
+        printf("Name: %s, ID: %d\n", player->inventory[i].name, player->inventory[i].id);
     }
-    if (!player->inventory[index].occupied) {
+    if (player->inventory[index].id == EMPTY) {
         printf("You cannot discard a non existent item.\n");
         return false;
     } else {
@@ -238,6 +236,7 @@ bool deleteItem(const int index, struct playerStruct *player) {
         player->inventory[MAX_INVENTORY - 1] = emptyItem;
         printf("replacing with empty item called %s\n", player->inventory[MAX_INVENTORY - 1].name);
     }
+    return true;
 }
 
 // randomItem(luck, xp) Gives random item
@@ -260,7 +259,6 @@ struct item randomItem(const int luck, const int xp) {
         return expertItems[randIndex];
     }
 }
-
 
 /*
 // Reveals surrounding area around camp

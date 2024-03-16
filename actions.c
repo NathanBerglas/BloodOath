@@ -21,7 +21,7 @@ bool train(struct playerStruct *player) {
     printf("(1) Willpower\n");
     printf("(2) Luck\n");
     printf("(3) Education\n");
-    printf("(4) Craftmanship\n");
+    printf("(4) Survival\n");
     for (int i = 0; i < 2; i++) {
         int trainAmount = rand(); // 800-1200
         trainAmount  %= (TRAINING_MAX-TRAINING_MIN);
@@ -41,8 +41,8 @@ bool train(struct playerStruct *player) {
             printf("You train education by: %d\n", trainAmount);
             break;
         case 4:
-           player->stats.craftmanship += trainAmount;
-            printf("You train craftmanship by: %d\n", trainAmount);
+           player->stats.survival += trainAmount;
+            printf("You train survival by: %d\n", trainAmount);
            break;
         default:
             printf("Not a correct skill. Training forfeit.\n");

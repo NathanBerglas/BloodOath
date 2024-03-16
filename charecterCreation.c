@@ -44,7 +44,7 @@ struct playerStruct charecterCreation(void) {
 	printf("Next we will determine the ability scores of  %s. Here are your available stats, chosen randomly.", inputc);
 	srand(time(NULL)); // Initialize a seed
 	printf("\n");
-	char *skills[] = {"willpower", "luck", "education", "craftmanship"};
+	char *skills[] = {"willpower", "luck", "education", "survival"};
 	for(int j = 0; j < SKILL_COUNT; j++) {
 		statScores[j] = rand();
 		statScores[j] %= maxSkill-minSkill;
@@ -67,7 +67,7 @@ struct playerStruct charecterCreation(void) {
 	}
 
 	// Xp set up
-	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
+	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.survival;
 
 	printf("Before you flee your village, you have the chance to grab a single item, choose carefully. Enter the number of the item you choose:\n");
 	struct item randItem1 = randomItem(player.stats.luck,player.xp);	
@@ -92,15 +92,15 @@ struct playerStruct charecterCreation(void) {
 	printf("Willpower: %d\n", player.stats.willpower);
 	printf("Luck: %d\n", player.stats.luck);
 	printf("Education: %d\n", player.stats.education);
-	printf("Craftmanship: %d\n", player.stats.craftmanship);
+	printf("Craftmanship: %d\n", player.stats.survival);
 	
 	#else
 	player.name[0] = 'P';
 	player.stats.willpower = 1800;
 	player.stats.luck = 1800;
 	player.stats.education = 1800;
-	player.stats.craftmanship = 1800;
-	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.craftmanship;
+	player.stats.survival = 1800;
+	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.survival;
 	#endif
 	
 	return player;
@@ -122,7 +122,7 @@ void skillAssign(int skill, int input, struct playerStruct* player, int statScor
 		break; 
 	case 3:
 		// Craftmanship
-		player->stats.craftmanship = *(statScores+input-1);
+		player->stats.survival = *(statScores+input-1);
 		break;
 	default:
 		// Other

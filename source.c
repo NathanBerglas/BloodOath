@@ -19,7 +19,6 @@ const int startingChunk = 10;
 // main(void)
 int main(void) {
 	// Variables
-	int input;
 	struct journalStruct journal;
 
 	// Set up and intialization
