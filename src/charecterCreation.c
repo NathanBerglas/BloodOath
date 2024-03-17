@@ -2,7 +2,6 @@
 
 // Libraries
 #include <stdio.h>
-#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,6 +15,10 @@
 // Constants
 const int minSkill = 1500;
 const int maxSkill = 2500;
+const int minStartVit = 3;
+const int maxStartVit = 6;
+const int maxStartHunger = 40;
+const int minStartHunger = 30;
 
 // Functions
 void skillAssign(int skill, int input, struct playerStruct* player, int statScores[]);
@@ -30,6 +33,17 @@ struct playerStruct charecterCreation(void) {
 	int inputi;
 	int statScores[SKILL_COUNT];
 
+	// Vitality, Sanity, and Hunger	
+	int randVit = rand();
+	randVit %= (maxStartVit - minStartVit);
+	randVit +=  minStartVit;
+	player.vitality = randVit;
+	player.sanity = 100; // Out of 100
+	int randHun = rand();
+	randHun %= (maxStartHunger - minStartHunger);
+	randHun +=  minStartHunger;
+	player.hunger = randHun;
+
 	// Inventory Set up
 
 	for (int i = 0; i < MAX_INVENTORY; i++) {
@@ -42,7 +56,6 @@ struct playerStruct charecterCreation(void) {
 	strcpy(player.name, inputc);
 	printf("\n");
 	printf("Next we will determine the ability scores of  %s. Here are your available stats, chosen randomly.", inputc);
-	srand(time(NULL)); // Initialize a seed
 	printf("\n");
 	char *skills[] = {"willpower", "luck", "education", "survival"};
 	for(int j = 0; j < SKILL_COUNT; j++) {
@@ -70,8 +83,8 @@ struct playerStruct charecterCreation(void) {
 	player.xp = player.stats.willpower+player.stats.luck+player.stats.education+player.stats.survival;
 
 	printf("Before you flee your village, you have the chance to grab a single item, choose carefully. Enter the number of the item you choose:\n");
-	struct item randItem1 = randomItem(player.stats.luck,player.xp);	
-	struct item randItem2 = randomItem(player.stats.luck,player.xp);
+	struct item randItem1 = randomItem(player.stats.luck,player.xp, ' ');	
+	struct item randItem2 = randomItem(player.stats.luck,player.xp, ' ');
 	printf("(1): %s / %s\n", randItem1.name, randItem1.description);
 	printf("(2): %s / %s\n", randItem2.name, randItem2.description);
 	scanf("%d",&inputi);

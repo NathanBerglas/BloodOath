@@ -2,6 +2,7 @@
 
 // Libraries
 #include <stdio.h>
+#include <string.h>
 
 // Headers
 #include "camp.h"
@@ -11,6 +12,9 @@
 void camp(struct playerStruct *player, struct journalStruct *journal) {
     printf("CAMP: \n");
     printf("Player: %s\n", player->name);
+    printf("Vitality: %d / %d\n", player->vitality, maxVitality);
+    printf("Sanity: %d / %d\n", player->sanity, maxSanity);
+    printf("Hunger (0 is dead) %d / %d\n", player->hunger, maxHunger);
     printf("XP: %d\n",player->xp);
     printf("Willpower: %d\n", player->stats.willpower);
     printf("Luck: %d\n", player->stats.luck);
@@ -21,10 +25,11 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
         printf("%d: %s \\ %s\n",i+1,player->inventory[i].name, player->inventory[i].description);
     }
     char biomeString[MAX_STRING_LENGTH];
-    biomeItoS(journal->biome, biomeString);
+    strcpy(biomeString, biomeCtoS(journal->biome));
     printf("Camp Biome: %s\n", biomeString);
     printf("Map: \n");
-    printf("(_: Forest, M: Mountain, r: River, L: Lake, D: Desert, V: Village, P: Pyramid, C: Cave, J: Jezebel's Castle)\n");
+    printf("(_/-: Forest, M: Mountain, r: River, L: Lake, D: Desert, V: Village, P: Pyramid, C: Cave, J: Jezebel's Castle)\n");
+    printf("Uppercase is un-scavenged, lower case is scavenged\n");
     printMap(journal);
     printf("Camp actions:\n");
     printf("(1) Manage Inventory\n");

@@ -9,97 +9,57 @@
 #include "playerStruct.h"
 #include "items.h"
 
-// Biome Macros (Needed to be Macros for Switch)
-// Because they are defined here, they are not in other files
-#define FOREST 990
-#define CAMP 999
-#define LAKE 991
-#define RIVER 992
-#define MOUNTAIN 993
-#define DESERT 994
-#define PYRAMID 995
-#define CAVE 996
-#define VILLAGE 997
-#define JEZEBEL_CASTLE 998
-
 // item constants
 const int luckScale = 1;
 const int stage1 = 15000;
 const int stage2 = 30000;
 
-int biomeCtoI(char biomeChar) {
-    switch (biomeChar)
-    {
-    case '_':
-        return FOREST;
-        break;
-    case 'L':
-        return LAKE;
-        break;
-    case 'r':
-        return RIVER;
-        break;
-    case 'M':
-        return MOUNTAIN;
-        break;
-    case 'D':
-        return DESERT;
-        break;
-    case 'P':
-        return PYRAMID;
-        break;
-    case 'C':
-        return CAVE;
-        break;
-    case 'V':
-        return VILLAGE;
-        break;
-    case 'J':
-        return JEZEBEL_CASTLE;
-    default:
-        return -1;
-        break;
-    }
-}
+// Max's
+const int maxVitality = 20;
+const int maxSanity = 100;
+const int maxHunger = 100;
 
-void biomeItoS(int biomeInt, char biomeString[MAX_STRING_LENGTH]) {
-    switch (biomeInt) {
-    case FOREST: {
-        char Forest[MAX_STRING_LENGTH] = "Forest";
-        strcpy(biomeString, Forest);
-        break; }
-    case LAKE: {
-        char Lake[MAX_STRING_LENGTH] = "Lake";
-        strcpy(biomeString, Lake);
-        break; }
-    case RIVER: {
-        char River[MAX_STRING_LENGTH] = "River";
-        strcpy(biomeString, River);
-        break; }
-    case MOUNTAIN: {
-        char Mountain[MAX_STRING_LENGTH] = "Mountain";
-        strcpy(biomeString, Mountain);
-        break; }
-    case DESERT: {
-        char Desert[MAX_STRING_LENGTH] = "Desert";
-        strcpy(biomeString, Desert);
-        break; }
-    case PYRAMID: {
-        char Pyramid[MAX_STRING_LENGTH] = "Pyramid";
-        strcpy(biomeString, Pyramid);
-        break; }
-    case CAVE: {
-        char Cave[MAX_STRING_LENGTH] = "Cave";
-        strcpy(biomeString, Cave);
-        break; }
-    case VILLAGE: {
-        char Village[MAX_STRING_LENGTH] = "Village";
-        strcpy(biomeString, Village);
-        break; }
-    case JEZEBEL_CASTLE: {
-        char Jezebels_Castle[MAX_STRING_LENGTH] = "Jezebel's Castle";
-        strcpy(biomeString, Jezebels_Castle);
-        break; }
+char* biomeCtoS(char biomeChar) {
+    switch (biomeChar) {
+        case '_': {
+            return "Forest";
+            break; }
+        case 'M': {
+            return "Mountain";
+            break;
+        } case 'D': {
+            return "Desert";
+            break;
+        } case 'C': {
+            return "Cave";
+            break;
+        } case 'V': {
+            return "Village";
+            break;
+        } case 'P': {
+            return "Pyramid";
+            break;
+        } case '-': {
+            return "Forest (Explored)";
+            break;
+        } case 'm': {
+            return "Mountain (Explored)";
+            break;
+        } case 'd': {
+            return "Desert (Explored)";
+            break;
+        } case 'c': {
+            return "Cave (Explored)";
+            break;
+        } case 'v': {
+            return "Village (Explored)";
+            break;
+        } case 'p': {
+            return "Pyramid (Explored)";
+            break;
+        } default: {
+            return "Unkown";
+        }
     }
 }
 
@@ -201,6 +161,7 @@ void moveCamp(struct journalStruct* journal, int x, int y) {
     journal->map.campY = y - 1;
     //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
     journal->map.playerMap[journal->map.campY][journal->map.campX] = 'C';
+    journal->biome = journal->map.fullMap[journal->map.campY][journal->map.campX];
     //printf("\nplayer x : %d,y: %d -> %c\n\n",journal->map.campX, journal->map.campY, journal->map.playerMap[journal->map.campY][journal->map.campX]);
 }
 
@@ -239,24 +200,61 @@ bool deleteItem(const int index, struct playerStruct *player) {
     return true;
 }
 
-// randomItem(luck, xp) Gives random item
-struct item randomItem(const int luck, const int xp) {
+// randomItem(luck, xp, biome char) Gives random item (' ' for no biome items)
+struct item randomItem(const int luck, const int xp, char biome) {
+    int biomeItemsPossible;
+    bool special = false; // Garuanteed special item if you explore a special location
+    if (biome == '_' || biome == 'M' || biome == 'D') {
+        biomeItemsPossible = ITEM_BIOME_SIZE;
+    } else if (biome == 'C' || biome == 'V' || biome == 'P') {
+        biomeItemsPossible = ITEM_SPECIAL_SIZE;
+        special = true;
+    } else {
+        biomeItemsPossible = 0;
+    }
     // Pick random item from a class
     int randIndex = rand();
-    randIndex %= ITEM_CLASS_SIZE;
+    randIndex %= (ITEM_CLASS_SIZE + biomeItemsPossible);
 
-    // Pick class based on xp mostly, and up to an entire luck bonus
-    int class = rand();
-    class %= (luck * luckScale);
-    class += xp;
-    
-    // Returns item
-    if (class < stage1) {
-        return noviceItems[randIndex];
-    } else if (class < stage2) {
-        return adeptItems[randIndex];
+    if (randIndex < ITEM_CLASS_SIZE && !special) {
+        // Pick class based on xp mostly, and up to an entire luck bonus
+        int class = rand();
+        class %= (luck * luckScale);
+        class += xp;
+
+        // Returns item
+        if (class < stage1) {
+            return noviceItems[randIndex];
+        } else if (class < stage2) {
+            return adeptItems[randIndex];
+        } else {
+            return expertItems[randIndex];
+        }
     } else {
-        return expertItems[randIndex];
+        randIndex -= ITEM_CLASS_SIZE;
+        switch (biome) {
+        case '_': 
+            return forestItems[randIndex];
+            break;
+        case 'M':
+            return mountainItems[randIndex];
+            break;
+        case 'D':
+            return desertItems[randIndex];
+            break;
+        case 'C':
+            return caveItems[randIndex];
+            break;
+        case 'P':
+            return pyramidItems[randIndex];
+            break;
+        case 'V':
+            return villageItems[randIndex];
+            break;
+        default:
+            return emptyItem;
+            break;
+        }
     }
 }
 
