@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 // Headers
 #include "charecterCreation.h"
@@ -22,6 +23,7 @@ int main(void) {
 	struct journalStruct journal;
 
 	// Set up and intialization
+	srand(time(NULL)); // Initialize a seed
 	mapInit(1, journal.map.fullMap);
 	mapInit(2, journal.map.playerMap);
 	mapInitChunk(journal.map.chunks);
@@ -29,7 +31,7 @@ int main(void) {
 	journal.map.campX = campStartX;
 	chunkReveal(&journal, startingChunk);
 	journal.map.playerMap[campStartY][campStartX] = 'C';
-    journal.biome = biomeCtoI(journal.map.fullMap[campStartY][campStartX]);
+    journal.biome = journal.map.fullMap[campStartY][campStartX];
 
 	// Intro
 	printf("BLOOD OATH - Made by Nate Berglas\n");
@@ -39,10 +41,9 @@ int main(void) {
     printf(" by slaying the vampire lord named Jezebel that preys on the land. You hear rumours that he lives in a castle in the forest, ");
     printf("but before taking him on, you need to power up. Collect your gear, and prepare for the adventure of your life!\n");
 	if (gameLoop(&player, &journal, 0)) {
-		printf("You win! You have defeated the vampire lord and are reinstated to your village as a hero!\n");
+		printf("GAME OVER. Thus was the tale of %s\n", player.name);
 	} else {
-		printf("You lose :0 \n");
+		printf("See you next time!\n");
 	}
-	printf("GAME OVER\n");
 	return 0;
 }

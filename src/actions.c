@@ -7,10 +7,15 @@
 // Headers
 #include "actions.h"
 #include "playerStruct.h"
+#include "items.h"
 
 // Constants
 const int TRAINING_MAX = 400;
 const int TRAINING_MIN = 200;
+const int vitRegainMin = 10;
+const int vitRegainMax = 15;
+const int sanityRegainMin = 60;
+const int sanityRegainMax = 80;
 
 // Action Functions
 bool train(struct playerStruct *player) {
@@ -21,7 +26,6 @@ bool train(struct playerStruct *player) {
     printf("(1) Willpower\n");
     printf("(2) Luck\n");
     printf("(3) Education\n");
-    printf("(4) Survival\n");
     for (int i = 0; i < 2; i++) {
         int trainAmount = rand(); // 800-1200
         trainAmount  %= (TRAINING_MAX-TRAINING_MIN);
@@ -40,10 +44,10 @@ bool train(struct playerStruct *player) {
             player->stats.education += trainAmount;
             printf("You train education by: %d\n", trainAmount);
             break;
-        case 4:
+        /*case 4:
            player->stats.survival += trainAmount;
             printf("You train survival by: %d\n", trainAmount);
-           break;
+           break; */
         default:
             printf("Not a correct skill. Training forfeit.\n");
             player->xp -= trainAmount;
@@ -55,18 +59,37 @@ bool train(struct playerStruct *player) {
     return true;
 }
 
-bool scavenge(struct playerStruct *player) {
-    // int inputi = 0;
-    // printf("Press 1: add item, 2: delete item\n");
-    // scanf("%d", &inputi);
-    // if (inputi == 1) {
-    //     appendItem(randomItem(player->stats.luck, player->xp), player);
-    // } else {
-    //     printf("Give item you wish to destroy from 1 to %d", MAX_INVENTORY);
-    //     scanf("%d", &inputi);
-    //     printf("inventory slot 2 name: %s",player->inventory[1].name);
-    //     deleteItem(inputi - 1, player);
-    // }
+bool scavenge(struct playerStruct *player, struct journalStruct *journal) {
+    printf("You leave camp to scavenge for supplies.\n");
+    if (player->inventory[MAX_INVENTORY - 1].id != EMPTY) {
+        printf("Warning! Your hands are full. If you do not have a backpack, you will not be able to pick up any more items.\n");
+        printf("Do you wish to continue? (1): Yes, (2), No\n");
+        int inputi;
+        scanf("%d",&inputi);
+        if (inputi != 1) {
+            printf("You head home.\n");
+            return false;
+        }
+    }
+    if (('a' < journal->biome && journal->biome < 'z') || journal->biome == '-') { // Checking if explored
+        printf("This area has already been scavenged. You return to camp.\n");
+        return false;
+    } else {
+        struct item foundItem = randomItem(player->stats.luck, player->xp, journal->biome);
+        printf("You found: %s!\n", foundItem.name);
+        if (appendItem(foundItem, player)) {
+            printf("You have taken the item.\n");
+        } else {
+            printf("Your inventory is full, you unfortunatly discard it.");
+        }
+        // Adjusts full map. Since playermap holds 'C', when you move the camp it adjusts for you, no extra stuff needed.
+        if (journal->map.fullMap[journal->map.campY][journal->map.campX] != '_') { // Check if forest, because unique behavior
+            journal->map.fullMap[journal->map.campY][journal->map.campX] += ('a' - 'A'); // Changes to lowercase;
+        } else {
+            journal->map.fullMap[journal->map.campY][journal->map.campX] = '-';
+        } 
+        journal->biome = journal->map.fullMap[journal->map.campY][journal->map.campX];
+    }
     return false;
 }
 
@@ -148,6 +171,23 @@ bool move(struct journalStruct *journal) {
     return true;
 }
 
+// For recover
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
 bool recover(struct playerStruct *player) {
-    return false;
+    int randVit = rand();
+    randVit %= (vitRegainMax - vitRegainMin);
+    randVit += vitRegainMin;
+
+    int randSan = rand();
+    randSan %= (sanityRegainMax - sanityRegainMin);
+    randSan += sanityRegainMin;
+
+    printf("You take the day easy and rest and recover.\n");
+    printf("You gain %d vitality, and %d sanity.\n", min(randVit, (maxVitality - player->vitality)), min(randSan, (maxSanity - player->sanity)));
+    player->vitality += min(randVit, (maxVitality - player->vitality));
+    player->sanity += min(randSan, (maxSanity - player->sanity));
+    return true;
 }

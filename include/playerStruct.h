@@ -23,6 +23,9 @@
 
 // Constants
 extern const struct item emptyItem;
+extern const int maxVitality;
+extern const int maxSanity;
+extern const int maxHunger;
 
 // Structures
 
@@ -45,6 +48,9 @@ struct statBlock {
 };
 
 struct playerStruct {
+	int vitality;
+	int sanity;
+	int hunger;
 	int xp;
 	struct statBlock stats;
 	struct item inventory[MAX_INVENTORY + BACKPACK_SIZE];
@@ -62,12 +68,11 @@ struct mapStruct {
 
 struct journalStruct {
 	struct mapStruct map;
-	int biome;
+	char biome;
 };
 
 // Functions
-int biomeCtoI(char);
-void biomeItoS(int, char[MAX_STRING_LENGTH]);
+char* biomeCtoS(char);
 void mapInit(const int, char[MAP_HEIGHT][MAP_WIDTH]);
 void mapInitChunk(char[CHUNK_COUNT]);
 void printMap(struct journalStruct*);
@@ -75,6 +80,6 @@ void chunkReveal(struct journalStruct*, int);
 void moveCamp(struct journalStruct*, int, int);
 bool appendItem(struct item, struct playerStruct*);
 bool deleteItem(int, struct playerStruct*);
-struct item randomItem(int, int);
+struct item randomItem(int, int, char);
 
 #endif
