@@ -4,4 +4,7 @@
 #include "playerStruct.h"
 
 // Functions
-struct playerStruct charecterCreation(void);
+struct playerStruct *createCharecter(void);
+void destroyCharecter(struct playerStruct*);
+struct journalStruct *createJournal(int, int, int);
+void destroyJournal(struct journalStruct*);

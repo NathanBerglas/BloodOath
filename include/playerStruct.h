@@ -73,7 +73,7 @@ struct journalStruct {
 
 // Functions
 char* biomeCtoS(char);
-void mapInit(const int, char[MAP_HEIGHT][MAP_WIDTH]);
+void mapInit(int, char[MAP_HEIGHT][MAP_WIDTH]);
 void mapInitChunk(char[CHUNK_COUNT]);
 void printMap(struct journalStruct*);
 void chunkReveal(struct journalStruct*, int);
