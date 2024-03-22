@@ -91,18 +91,19 @@ const struct item desertItems[ITEM_BIOME_SIZE] = {
 // Special Items: 1 of each per game
 const struct item villageItems[ITEM_SPECIAL_SIZE] = {
 {"Backpack", "Allows you to carry more items", BACKPACK, &backpackIF},
-{"Blessing of Christ", "You are immune to the mind altering affects of revenants", BLESSING_OF_CHRIST, &blessingOfChristIF},
+{"General Store", "Allows you to purchase any single item", GENERAL_STORE, &generalStoreIF},
 {"Map of surrounding area", "Unveils your map in entirety", MAP_OF_SURROUNDING_AREA, &mapOfSurroundingAreaIF} };
 
 const struct item pyramidItems[ITEM_SPECIAL_SIZE] = {
 {"Watch of the Chronomaster", "Allows you to take an extra action per day", WATCH_OF_THE_CHRONOMASTER, &watchOfTheChronomasterIF},
 {"Desert Spirit's Sundial","Magically transports you back slightly in time", DESERT_SPIRITS_SUNDIAL, &desertSpiritsSundialIF},
-{"The soul of a Pharaoh", "An ancient spellcaster, you will always suceed in spells", THE_SOUL_OF_A_PHAROAH, &theSoulOfAPharoahIF} };
+{"The soul of a Pharaoh", "An ancient spellcaster, you will always succeed in spells", THE_SOUL_OF_A_PHAROAH, &theSoulOfAPharoahIF} };
 
 const struct item caveItems[ITEM_SPECIAL_SIZE] = {
 {"Jezebel's Key", "A key that can open a locked door...", JEZEBELS_KEY, &jezebelsKeyIF},
 {"Jezebel's Coin", "Offers you a second chance", JEZEBELS_COIN, &jezebelsCoinIF},
-{"Jezebel's Grimoire", "Allows you to summon any single item", JEZEBELS_GRIMOIRE, &jezebelsGrimoireIF} }; 
+{"Blessing of Jezebel", "You are immune to the mind altering affects of revenants", BLESSING_OF_JEZEBEL, &blessingOfJezebelIF},
+ }; 
 
 // Item Functions
 bool emptyIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
@@ -181,7 +182,7 @@ bool scorpionVenomIF(struct playerStruct *player, struct journalStruct *journal)
 
 // Village Items
 bool backpackIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool blessingOfChristIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
+bool generalStoreIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
 bool mapOfSurroundingAreaIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
 
 // Pyramid Items
@@ -192,4 +193,4 @@ bool theSoulOfAPharoahIF(struct playerStruct *player, struct journalStruct *jour
 // Cave Items
 bool jezebelsKeyIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
 bool jezebelsCoinIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool jezebelsGrimoireIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
+bool blessingOfJezebelIF(struct playerStruct *player, struct journalStruct *journal) { return false; }

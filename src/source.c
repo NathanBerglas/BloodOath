@@ -24,6 +24,20 @@ int main(void) {
 
 	// Set up journal and playerstruct
 	struct journalStruct *journal = createJournal(campStartY, campStartX, startingChunk);
+	
+	// BELOW IS JSON ITEM STUFF
+	/*FILE *fptr;
+	const char *filename = "/u4/nberglas/bloodOath/data/ints";
+	fptr = fopen(filename,"r");
+	if (!fptr) {
+		printf("ERROR: FILE NOT FOUND\n");
+		exit(1);
+	}
+	int finput;
+	fscanf(fptr,"%d", &finput);
+	printf("%d\n", finput);
+	fclose(fptr); */
+	// ABOVE IS JSON ITEM STUFF
 
 	// Intro
 	printf("BLOOD OATH - Made by Nate Berglas\n");

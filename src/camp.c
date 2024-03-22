@@ -42,7 +42,11 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
         printf("Select what item you wish you to use?\n");
         int inputi;
         scanf("%d", &inputi);
-        player->inventory[inputi - 1].use(player, journal);
+        if (player->inventory[inputi - 1].use == NULL) {
+            printf("You may not use this item.\n");
+        } else {
+            player->inventory[inputi - 1].use(player, journal);
+        }
         break;
     default:
         break; // Exit

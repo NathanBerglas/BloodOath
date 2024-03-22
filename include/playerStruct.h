@@ -34,8 +34,8 @@ struct journalStruct; // For item
 
 // Player
 struct item {
-	char name[MAX_STRING_LENGTH];
-	char description[MAX_DESCRIPTION_LENGTH];
+	char *name;
+	char *description;
 	int id;
 	bool (*use)(struct playerStruct*, struct journalStruct*);
 };

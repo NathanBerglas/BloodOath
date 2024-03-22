@@ -93,7 +93,7 @@ extern const struct item caveItems[ITEM_SPECIAL_SIZE];
 
 // Village Items
 #define BACKPACK 200
-#define BLESSING_OF_CHRIST 201
+#define GENERAL_STORE 201
 #define MAP_OF_SURROUNDING_AREA 202
 
 // Pyramid Items
@@ -104,7 +104,7 @@ extern const struct item caveItems[ITEM_SPECIAL_SIZE];
 // Cave Items
 #define JEZEBELS_KEY 220
 #define JEZEBELS_COIN 221
-#define JEZEBELS_GRIMOIRE 222
+#define BLESSING_OF_JEZEBEL 222
 
 // Item Functions (IF)
 
@@ -185,7 +185,7 @@ bool scorpionVenomIF(struct playerStruct*, struct journalStruct*);
 
 // Village Items
 bool backpackIF(struct playerStruct*, struct journalStruct*);
-bool blessingOfChristIF(struct playerStruct*, struct journalStruct*);
+bool generalStoreIF(struct playerStruct*, struct journalStruct*);
 bool mapOfSurroundingAreaIF(struct playerStruct*, struct journalStruct*);
 
 // Pyramid Items
@@ -196,4 +196,4 @@ bool theSoulOfAPharoahIF(struct playerStruct*, struct journalStruct*);
 // Cave Items
 bool jezebelsKeyIF(struct playerStruct*, struct journalStruct*);
 bool jezebelsCoinIF(struct playerStruct*, struct journalStruct*);
-bool jezebelsGrimoireIF(struct playerStruct*, struct journalStruct*);
+bool blessingOfJezebelIF(struct playerStruct*, struct journalStruct*);
