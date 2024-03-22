@@ -16,6 +16,8 @@ extern const struct item villageItems[ITEM_SPECIAL_SIZE];
 extern const struct item pyramidItems[ITEM_SPECIAL_SIZE];
 extern const struct item caveItems[ITEM_SPECIAL_SIZE];
 
+extern const struct item specialItems[1];
+
 // Empty Item
 #define EMPTY 0
  
@@ -105,6 +107,9 @@ extern const struct item caveItems[ITEM_SPECIAL_SIZE];
 #define JEZEBELS_KEY 220
 #define JEZEBELS_COIN 221
 #define BLESSING_OF_JEZEBEL 222
+
+// Special Items
+#define DRUID_TALISMAN 230
 
 // Item Functions (IF)
 
@@ -197,3 +202,6 @@ bool theSoulOfAPharoahIF(struct playerStruct*, struct journalStruct*);
 bool jezebelsKeyIF(struct playerStruct*, struct journalStruct*);
 bool jezebelsCoinIF(struct playerStruct*, struct journalStruct*);
 bool blessingOfJezebelIF(struct playerStruct*, struct journalStruct*);
+
+// Special Items
+bool druidTalismanIF(struct playerStruct*, struct journalStruct*);

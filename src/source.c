@@ -41,6 +41,7 @@ int main(void) {
 
 	// Intro
 	printf("BLOOD OATH - Made by Nate Berglas\n");
+	printf("Testing make\n");
 	struct playerStruct *player = createCharecter();
 	printf("This story starts during the first year of your exile. You, %s, were found to be practicing dark magic", player->name);
 	printf(", and due to your heresy was excommunicated. You may rejoin society when you have proved your faith,");

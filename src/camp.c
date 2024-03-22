@@ -45,7 +45,9 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
         if (player->inventory[inputi - 1].use == NULL) {
             printf("You may not use this item.\n");
         } else {
-            player->inventory[inputi - 1].use(player, journal);
+            if(!player->inventory[inputi - 1].use(player, journal)) {
+                printf("You may not use this item at this time.\n");
+            }
         }
         break;
     default:
