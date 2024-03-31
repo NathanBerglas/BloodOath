@@ -1,4 +1,5 @@
 //playerStruct.h
+#pragma once
 #ifndef PLAYERSTRUCT_H
 #define PLAYERSTRUCT_H
 
@@ -47,11 +48,25 @@ struct statBlock {
 	int survival;
 };
 
+struct weaponStruct {
+	int damage;
+	int scale;
+	int willpower;
+	int type;
+};
+
+struct equipeditem {
+	struct item equipped;
+	struct equipedItem* next;
+};
+
 struct playerStruct {
 	int vitality;
 	int sanity;
 	int hunger;
 	int xp;
+	struct weaponStruct weapon;
+	struct item equipedWeapon;
 	struct statBlock stats;
 	struct item inventory[MAX_INVENTORY + BACKPACK_SIZE];
 	char name[MAX_STRING_LENGTH];

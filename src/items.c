@@ -13,7 +13,7 @@
 const int SWORD_T = 3000;
 const int WHIP_T = 3100;
 const int BLUDGEON_T = 3200;
-const int MAGIC_T = 3300;
+const int SPELL_T = 3300;
 const int FSPECIAL_T = 3400;
 const int MSPECIAL_T = 3410;
 const int DSPECIAL_T = 3420;
@@ -127,24 +127,72 @@ const struct item caveItems[ITEM_SPECIAL_SIZE] = {
 
 // Abstract Item Functions
 
-bool trainSkill(int trainAmnt, int skill) {
-    // do the thing zu lee
-    return false;
+bool trainSkill(int trainAmnt, int skill, struct playerStruct *player) {
+    switch(skill) {
+        case WILLPOWER:
+            player->stats.willpower += trainAmnt;
+            break;
+        case EDUCATION:
+            player->stats.education += trainAmnt;
+            break;
+        case LUCK:
+            player->stats.luck += trainAmnt;
+            break;
+        case SURVIVABILITY:
+            player->stats.survival += trainAmnt;
+            break;
+        default:
+            return false;
+    }
+    return true;
 }
 
-bool weapon(int damage, int type) {
-    // bonk
-    return false;
+bool weapon(int damage, int type, struct playerStruct *player, struct item item) {
+    if (appendItem(player->equipedWeapon, player) && player->equipedWeapon.id != emptyItem.id) {
+        printf("You unequip %s and put it back in your inventory.\n", player->equipedWeapon.name);
+    } else {
+        printf("You unequip %s and cannot fit it in your inventory.\n", player->equipedWeapon.name);
+    }
+    struct weaponStruct weapon;
+    weapon.damage = damage;
+    weapon.scale = 0;
+    weapon.willpower = 0;
+    weapon.type = type;
+    player->weapon = weapon;
+    player->equipedWeapon = item;
+    printf("You equip this weapon. Damage: %d\n", damage);
+    return true;
 }
 
-bool spell(int willpower, int scale) {
-    // she cast on my spell until i fireball
-    return false;
+bool spell(int willpower, int scale, int type, struct playerStruct *player, struct item item) {
+    if (appendItem(player->equipedWeapon, player) && player->equipedWeapon.id != emptyItem.id) {
+        printf("You unequip %s and put it back in your inventory.\n", player->equipedWeapon.name);
+    } else {
+        printf("You unequip %s and cannot fit it in your inventory.\n", player->equipedWeapon.name);
+    }
+    struct weaponStruct weapon;
+    weapon.scale = scale;
+    weapon.damage = 0;
+    weapon.willpower = willpower;
+    weapon.type = type;
+    player->weapon = weapon;
+    player->equipedWeapon = item;
+    printf("You equip this spell. Scale: %d, Willpower: %d\n", scale, willpower);
+    return true;
 }
 
-bool heal(int healing, int food) {
-    // so good
-    return false;
+// For heal
+int minHeal(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+bool heal(int healing, int food, struct playerStruct *player) {
+    int healAmount = minHeal(healing, (maxVitality - player->vitality));
+    int hungerAmount = minHeal(food, (maxHunger - player->hunger));
+    player->vitality += healAmount;
+    player->hunger += hungerAmount;
+    printf("You heal for %d, and restore %d hunger.\n", healAmount, hungerAmount);
+    return true;
 }
 
 // Specific Item Functions
@@ -153,33 +201,34 @@ bool heal(int healing, int food) {
 bool pokeyStickIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int damage = 4;
     const int type = SWORD_T;
-    return weapon(damage, type);
+    return weapon(damage, type, player, noviceItems[0]);
  }
 
 // 3 damage, whip type
 bool fiberWhipIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int damage = 3;
     const int type = WHIP_T;
-    return weapon(damage, type);
+    return weapon(damage, type, player, noviceItems[1]);
 }
 
 // 5 damage, bludgeon type
 bool rockIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int damage = 5;
     const int type = BLUDGEON_T;
-    return weapon(damage, type);
+    return weapon(damage, type, player, noviceItems[2]);
 }
 
 bool magicWandIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int willpower = 2000;
-    const int scale = 600; // idk figure it out
-    return spell(willpower, scale);
+    const int scale = 900; // idk figure it out
+    const int type = SPELL_T;
+    return spell(willpower, scale, type, player, noviceItems[3]);
 }
 
 bool bandaidIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int healing = 5;
     const int food = 0;
-    return heal(healing, food);
+    return heal(healing, food, player);
 }
 
 bool ballOfMudIF(struct playerStruct *player, struct journalStruct *journal) { 
@@ -196,35 +245,36 @@ bool ballOfMudIF(struct playerStruct *player, struct journalStruct *journal) {
         if (!appendItem(specialItems[0], player)) {
             printf("You reject Hoggle's gift :(\n");
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool rawMeatIF(struct playerStruct *player, struct journalStruct *journal) { 
-    const int healing = 3;
+    const int healing = 1;
     const int food = 10;
-    return heal(healing, food);
+    return heal(healing, food, player);
 }
 
 bool strangeMushroomIF(struct playerStruct *player, struct journalStruct *journal) { 
     int healing = rand() % 10;
     healing -= 10;
-    return heal(healing, 10);  
+    return heal(healing, 10, player);  
 }
 
 bool puzzleIF(struct playerStruct *player, struct journalStruct *journal) {
     const int trainAmnt = 500;
-    return trainSkill(trainAmnt, WILLPOWER);
+    return trainSkill(trainAmnt, WILLPOWER, player);
 }
 
 bool diceIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int trainAmnt = 500;
-    return trainSkill(trainAmnt, LUCK);
+    return trainSkill(trainAmnt, LUCK, player);
 }
 
 bool spellBookIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int trainAmnt = 500;
-    return trainSkill(trainAmnt, WILLPOWER);
+    return trainSkill(trainAmnt, WILLPOWER, player);
 }
 
 bool unsignedDocumentIF(struct playerStruct *player, struct journalStruct *journal) { 
@@ -250,31 +300,32 @@ bool unsignedDocumentIF(struct playerStruct *player, struct journalStruct *journ
 bool swordIF(struct playerStruct *player, struct journalStruct *journal) { 
     const int damage = 8;
     const int type = SWORD_T;
-    return weapon(damage, type);
+    return weapon(damage, type, player, adeptItems[0]);
 }
 
 bool leatherWhipIF(struct playerStruct *player, struct journalStruct *journal) {
     const int damage = 7;
     const int type = WHIP_T;
-    return weapon(damage, type);
+    return weapon(damage, type, player, adeptItems[1]);
 }
 
 bool maceIF(struct playerStruct *player, struct journalStruct *journal) {
     const int damage = 10;
     const int type = BLUDGEON_T;
-    return weapon(damage, type);
+    return weapon(damage, type, player, adeptItems[2]);
 }
 
 bool wizardHatIF(struct playerStruct *player, struct journalStruct *journal) {
-    const int willpower = 2500;
-    const int scale = 400; // idk figure it out
-    return spell(willpower, scale);
+    const int willpower = 4000;
+    const int scale = 600; // idk figure it out
+    const int type = SPELL_T;
+    return spell(willpower, scale, type, player, adeptItems[3]);
 }
 
 bool firstAidKitIF(struct playerStruct *player, struct journalStruct *journal) {
     const int healing = 9;
     const int food = 0;
-    return heal(healing, food);
+    return heal(healing, food, player);
 }
 
 bool leafIF(struct playerStruct *player, struct journalStruct *journal) { 
@@ -284,7 +335,7 @@ bool leafIF(struct playerStruct *player, struct journalStruct *journal) {
 bool cookedMeatIF(struct playerStruct *player, struct journalStruct *journal) {
     const int healing = 3;
     const int food = 30;
-    return heal(healing, food);
+    return heal(healing, food, player);
 }
 
 bool potionIF(struct playerStruct *player, struct journalStruct *journal) {
@@ -303,17 +354,17 @@ bool potionIF(struct playerStruct *player, struct journalStruct *journal) {
 
 bool bookIF(struct playerStruct *player, struct journalStruct *journal) {
     const int trainAmnt = 800;
-    return trainSkill(trainAmnt, WILLPOWER);
+    return trainSkill(trainAmnt, WILLPOWER, player);
 }
 
 bool deckOfCardsIF(struct playerStruct *player, struct journalStruct *journal) {
     const int trainAmnt = 800;
-    return trainSkill(trainAmnt, LUCK);
+    return trainSkill(trainAmnt, LUCK, player);
 }
 
 bool orbIF(struct playerStruct *player, struct journalStruct *journal) {
     const int trainAmnt = 800;
-    return trainSkill(trainAmnt, WILLPOWER);
+    return trainSkill(trainAmnt, WILLPOWER, player);
 }
 
 bool scrollIF(struct playerStruct *player, struct journalStruct *journal) {
@@ -328,18 +379,113 @@ bool scrollIF(struct playerStruct *player, struct journalStruct *journal) {
 }
 
 // Expert Items
-bool katanaIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool morningstarIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool warHammerIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool wizardStaffIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool potionOfHealingIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool branchIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool steakIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool scrollOfRejuvinationIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool personalJournalIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool rabbitFootIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool demonSoulInAJarIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
-bool knifeAndPotIF(struct playerStruct *player, struct journalStruct *journal) { return false; }
+bool katanaIF(struct playerStruct *player, struct journalStruct *journal) { 
+    const int damage = 15;
+    const int type = SWORD_T;
+    return weapon(damage, type, player, expertItems[0]);
+}
+
+bool morningstarIF(struct playerStruct *player, struct journalStruct *journal) {
+    const int damage = 13;
+    const int type = WHIP_T;
+    return weapon(damage, type, player, expertItems[1]);
+}
+
+bool warHammerIF(struct playerStruct *player, struct journalStruct *journal) {
+    const int damage = 17;
+    const int type = BLUDGEON_T;
+    return weapon(damage, type, player, expertItems[2]);
+}
+
+bool wizardStaffIF(struct playerStruct *player, struct journalStruct *journal) { 
+    const int willpower = 6000;
+    const int scale = 400; // idk figure it out
+    const int type = SPELL_T;
+    return spell(willpower, scale, type, player, expertItems[3]);
+}
+
+bool potionOfHealingIF(struct playerStruct *player, struct journalStruct *journal) {
+    const int healing = 15;
+    const int food = 0;
+    return heal(healing, food, player);
+}
+
+bool branchIF(struct playerStruct *player, struct journalStruct *journal) {
+    return ballOfMudIF(player, journal);
+}
+
+bool steakIF(struct playerStruct *player, struct journalStruct *journal) {
+    const int healing = 5;
+    const int food = 60;
+    return heal(healing, food, player);
+}
+
+bool scrollOfRejuvinationIF(struct playerStruct *player, struct journalStruct *journal) {
+    printf("You feel all your lost vitality get restored!\n");
+    return heal(maxVitality, 0, player);
+}
+
+bool personalJournalIF(struct playerStruct *player, struct journalStruct *journal) {
+    printf("You read journal. It's written by an adventurer, not too many years past.\n");
+    printf("In his stories, he details two places of power. In the desert there is a pyramid hiding treausres unkown.\n");
+    printf("The second place is a cave. The final journal entry is the morning before he entered.\n");
+    const int trainAmnt = 1000;
+    return trainSkill(trainAmnt, WILLPOWER, player);
+}
+
+bool rabbitFootIF(struct playerStruct *player, struct journalStruct *journal) {
+    const int trainAmnt = 500;
+    return trainSkill(trainAmnt, LUCK, player);
+}
+
+bool demonSoulInAJarIF(struct playerStruct *player, struct journalStruct *journal) {
+    const int trainAmnt = 1000;
+    return trainSkill(trainAmnt, WILLPOWER, player);
+}
+
+bool knifeAndPotIF(struct playerStruct *player, struct journalStruct *journal) {
+    printf("You examine the pot and knife. The bottom of the pot and the edge of the knife are blood stained.\n");
+    printf("Do you wish to cut yourself and drop your blood into the pot? (1) Yes, (2) No\n");
+    int inputi = 0;
+    scanf("%d", &inputi);
+    if (inputi == 1) {
+        printf("As you watch your blood drip into the pot, you feel a chill run down your spine.\n");
+        printf("Appearing infront of you is a very tall and very beatiful woman.\n");
+        printf("She does not look vampiric to you, but there is no mistaking her lack of humanity.\n");
+        printf("She say's \"You have summoned an agent of Jezebel. What do you want?\n");
+        printf("(1): Who are you?\n");
+        printf("(2): I wish to kill you.\n");
+        printf("(3): I wish to know more about Jezebel.\n");
+        printf("(4): I wish to become a vampire.\n");
+        scanf("%d", &inputi);
+        switch(inputi) {
+            case 1:
+                printf("She replies, \"I am my masters's Thrall. I do not have a name. I am a simple demon here to do my masters's blessing.\"\n");
+                break;
+            case 2:
+                printf("She replies, \"A foolish goal. Do not tempt me mortal, for I could kill you a hundred ways each time you blink.\"\n");
+                break;
+            case 3:
+                printf("She does not reply. She simply smiles.\n");
+                break;
+            case 4:
+                printf("She smiles, and replies, \"Oh? You do? Be my guest.\" ");
+                if (appendItem(noviceItems[11], player)) {
+                    printf("She hands you a scroll.\n");
+                } else {
+                    printf("She says, \"Unfortunatly you cannot hold anything more. How disapointing\"\n");
+                }
+                printf("In a puff of smoke, she disapears just as she appeared.\n");
+                return true;
+                break;
+            }
+            printf("The demon says, \"Either way, my buisness with you is done. My master will deal with you when the time is right.\"\n");
+            printf("She steps away from you, but turns back. \"I will leave you to play, young adventurer.\" And with that, she disapears in a puff of smoke.\n");
+        } else {
+        printf("You decide to not risk it and discard the knife and pot.\n");
+    }
+    return true;
+}
 
 // Forest Items
 bool cloakIF(struct playerStruct *player, struct journalStruct *journal) { return false; }

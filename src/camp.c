@@ -32,24 +32,40 @@ void camp(struct playerStruct *player, struct journalStruct *journal) {
     printf("Uppercase is un-scavenged, lower case is scavenged\n");
     printMap(journal);
     printf("Camp actions:\n");
-    printf("(1) Manage Inventory\n");
-    printf("(2) Exit\n");
+    printf("(1) Use an item\n");
+    printf("(2) Delete an item\n");
+    printf("(3) Exit\n");
     int inputi = 0;
     scanf("%d",&inputi);
     switch (inputi) {
     case 1:
         // Manage Inventory
         printf("Select what item you wish you to use?\n");
-        int inputi;
         scanf("%d", &inputi);
         if (player->inventory[inputi - 1].use == NULL) {
             printf("You may not use this item.\n");
         } else {
             if(!player->inventory[inputi - 1].use(player, journal)) {
                 printf("You may not use this item at this time.\n");
+            } else {
+                deleteItem(inputi - 1, player);
             }
         }
         break;
+    case 2:
+        // delete an item
+         // Manage Inventory
+        printf("Select what item you wish you to delete?\n");
+        scanf("%d", &inputi);
+        if (player->inventory[inputi - 1].use == NULL) {
+            printf("You may not delete this item.\n");
+        } else {
+            if(deleteItem(inputi - 1, player)) {
+                printf("You have successfully thrown out that item.\n");
+            } else {
+                printf("You may not throw out that item.\n");
+            }
+        }
     default:
         break; // Exit
     }

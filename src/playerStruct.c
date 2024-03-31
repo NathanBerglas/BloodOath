@@ -181,21 +181,23 @@ bool appendItem(const struct item item, struct playerStruct *player) {
 
 // index, and player
 bool deleteItem(const int index, struct playerStruct *player) {
-    printf("Here is inventory: \n");
-    for (int i = 0; i < MAX_INVENTORY; i++) {
-        printf("Name: %s, ID: %d\n", player->inventory[i].name, player->inventory[i].id);
-    }
+    // if (print) {
+    //     printf("Here is inventory: \n");
+    //     for (int i = 0; i < MAX_INVENTORY; i++) {
+    //         printf("Name: %s, ID: %d\n", player->inventory[i].name, player->inventory[i].id);
+    //     }
+    // }
     if (player->inventory[index].id == EMPTY) {
         printf("You cannot discard a non existent item.\n");
         return false;
     } else {
         for (int i = index; i + 1 < MAX_INVENTORY; i++) {
-            printf("Moving index %d, item was %s", i, player->inventory[i].name);
+            //printf("Moving index %d, item was %s", i, player->inventory[i].name);
             player->inventory[i] = player->inventory[i+1];
-            printf(", now is %s.\n",player->inventory[i].name);
+            //printf(", now is %s.\n",player->inventory[i].name);
         }
         player->inventory[MAX_INVENTORY - 1] = emptyItem;
-        printf("replacing with empty item called %s\n", player->inventory[MAX_INVENTORY - 1].name);
+        //printf("replacing with empty item called %s\n", player->inventory[MAX_INVENTORY - 1].name);
     }
     return true;
 }

@@ -1,4 +1,5 @@
 //gameLoop.h
+#pragma once
 #ifndef GAMELOOP_H
 #define GAMELOOP_H
 

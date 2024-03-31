@@ -70,6 +70,7 @@ struct playerStruct *createCharecter(void) {
 	player->hunger = randHun;
 
 	// Inventory Set up
+	player->equipedWeapon = emptyItem;
 
 	for (int i = 0; i < MAX_INVENTORY; i++) {
 		player->inventory[i] = emptyItem;

@@ -1,4 +1,7 @@
 //items.h
+#pragma once
+#ifndef ITEMS_H
+#define ITEMS_H
 
 // Headers
 #include "playerStruct.h"
@@ -205,3 +208,4 @@ bool blessingOfJezebelIF(struct playerStruct*, struct journalStruct*);
 
 // Special Items
 bool druidTalismanIF(struct playerStruct*, struct journalStruct*);
+#endif
